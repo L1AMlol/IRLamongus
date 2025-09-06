@@ -1,6 +1,8 @@
 import asyncio
 import websockets
 import json
+from Player import Player
+from Host import Host
 
 hosts = set()
 players = set()

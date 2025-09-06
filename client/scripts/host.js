@@ -20,22 +20,14 @@ socket.onopen = () => {
     sendPayload(payload);
 };
 
-// When the server sends a message back
 socket.onmessage = (message) => {
     console.log('Received message from server: \n', message.data);
-
-    // if (message.data === 'ping') {
-    //     console.log('Received ping, sending pong');
-    //     socket.send('pong');
-    // }
 };
 
-// If there is an error in the WebSocket connection
 socket.onerror = (error) => {
     console.error('WebSocket Error:', error);
 };
 
-// When the connection is closed
 socket.onclose = e => {
     console.log('WebSocket connection closed');
 };
