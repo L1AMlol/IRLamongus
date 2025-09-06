@@ -12,7 +12,7 @@ const sendPayload = function (payload) {
 socket.onopen = () => {
     console.log('Connected to WebSocket server');
     const payload = {
-        message: "first from host",
+        data: "first from host",
         userType: "host",
         messageType: "auth",
         sender: sender,
@@ -36,9 +36,9 @@ testBtn.addEventListener('click', () => {
     if(!messageInput.value){ return }
     const message = messageInput.value;
     const payload = {
-        message: message,
+        data: message,
         userType: "host",
-        messageType: "normal",
+        messageType: "test message",
         sender: sender,
     };
     sendPayload(payload);

@@ -24,13 +24,21 @@ async def handle_player(player:Player):
             print(f"name set for player: {player.name}")
 
         case "test message":
-            print(f"{player.name} -> {data}")
+            if player.name:
+                print(f"{player.name} -> {data}")
+            else:
+                print(f"player? -> {data}")
     
 
 
 
 async def handle_host(host:Host):
-    pass
+    payload = await wait_on_message(host.socket)
+    data = payload['data']
+
+    match payload['messageType']:
+        case "test message":
+            print(f"host -> {data}")
 
 async def handle_client(ws):
     
