@@ -1,5 +1,6 @@
 import asyncio
 import websockets
+import socket
 import json
 from Player import Player
 from Host import Host
@@ -89,9 +90,18 @@ async def broadcast_ping():
                 await ws.ping()
         await asyncio.sleep(5)
 
+def get_local_ip():
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.connect(("8.8.8.8", 80))
+            return s.getsockname()[0]
+    except Exception:
+        return "127.0.0.1"  # Fallback to localhost
+
 async def start_server():
-    async with websockets.serve(handle_client, "localhost", 8765):
-        print("Server started at ws://localhost:8765")
+    ip = get_local_ip()
+    async with websockets.serve(handle_client, ip, 8765):
+        print(f"Server started at {ip}:8765")
         asyncio.create_task(broadcast_ping())
         await asyncio.Future()
 

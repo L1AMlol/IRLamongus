@@ -3,7 +3,8 @@ const nameInput = document.getElementById("nameInput");
 
 const sender = Date.now + Math.floor(Math.random() * (106030200));
 
-const socket = new WebSocket("ws://localhost:8765");
+const ip = location.host.split(':')[0];
+const socket = new WebSocket(`ws://${ip}:8765`);
 
 const sendPayload = function (payload) {
     socket.send(JSON.stringify(payload));
