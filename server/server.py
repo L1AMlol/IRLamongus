@@ -4,8 +4,8 @@ import json
 from Player import Player
 from Host import Host
 
-hosts = set()
-players = set()
+host_clients = set()
+player_clients = set()
 
 async def handle_client(ws):
     
@@ -13,16 +13,16 @@ async def handle_client(ws):
         first_msg_str = await ws.recv()
         first_msg = json.loads(first_msg_str)
         if first_msg['userType'] == "host":
-            if ws not in hosts:
-                hosts.add(ws)
+            if ws not in host_clients:
+                host_clients.add(ws)
                 # ToDo: add class host
                 is_host = True
                 is_player = False
                 print("a host has connected")
             
         elif first_msg['userType'] == "player":
-            if ws not in players:
-                players.add(ws)
+            if ws not in player_clients:
+                player_clients.add(ws)
                 # ToDo: add class player
                 is_host = False
                 is_player = True
@@ -37,25 +37,25 @@ async def handle_client(ws):
 
 
     except websockets.exceptions.ConnectionClosed:
-        if ws in hosts:
+        if ws in host_clients:
             print("a host has disconnected")
-        elif ws in players:
+        elif ws in player_clients:
             print("a player has disconnected")
 
     finally:
-        if ws in hosts:
-            hosts.remove(ws)
-        elif ws in players:
-            players.remove(ws)
+        if ws in host_clients:
+            host_clients.remove(ws)
+        elif ws in player_clients:
+            player_clients.remove(ws)
         
 
 async def broadcast_ping():
     while True:
-        if hosts:
-            for ws in hosts:
+        if host_clients:
+            for ws in host_clients:
                 await ws.ping()
-        if players:
-            for ws in players:
+        if player_clients:
+            for ws in player_clients:
                 await ws.ping()
         await asyncio.sleep(5)
 
