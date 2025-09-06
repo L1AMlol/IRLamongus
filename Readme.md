@@ -7,3 +7,4 @@ For now only on local networks.
 
 ## To Do
 
+- test
