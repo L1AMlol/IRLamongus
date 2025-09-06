@@ -6,16 +6,40 @@ from Host import Host
 
 host_clients = set()
 player_clients = set()
+hosts = set()
+clients = set()
+
+async def wait_on_message(ws:websockets.WebSocketServerProtocol) -> dict:
+    message_str = await ws.recv()
+    message = json.loads(message_str)
+    return message
+
+async def handle_player(player:Player):
+    payload = wait_on_message(player.socket)
+    data = payload['data']
+    
+    match payload['messageType']:
+        case "set name":
+            player.name = str(data)
+
+        case "test message":
+            if player.name:
+                print(f"{player.name} -> {data}")
+    
+
+
+
+async def handle_host(host:Host):
+    pass
 
 async def handle_client(ws):
     
     try:
-        first_msg_str = await ws.recv()
-        first_msg = json.loads(first_msg_str)
+        first_msg = wait_on_message(ws)
         if first_msg['userType'] == "host":
             if ws not in host_clients:
                 host_clients.add(ws)
-                # ToDo: add class host
+                host = Host(ws, first_msg['sender'])
                 is_host = True
                 is_player = False
                 print("a host has connected")
@@ -23,17 +47,15 @@ async def handle_client(ws):
         elif first_msg['userType'] == "player":
             if ws not in player_clients:
                 player_clients.add(ws)
-                # ToDo: add class player
+                player = Player(ws, first_msg['sender'])
                 is_host = False
                 is_player = True
                 print("a player has connected")
         while True:
-            payload_str = await ws.recv()
-            payload = json.loads(payload_str)
             if is_host:
-                print(f"host sent: {payload['message']}")
+                handle_host(host)
             elif is_player:
-                print(f"player sent: {payload['message']}")
+                handle_player(player)
 
 
     except websockets.exceptions.ConnectionClosed:

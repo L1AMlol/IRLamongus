@@ -1,6 +1,10 @@
+import websockets
+
 class Player:
 
-    def __init__(self, socket, id, is_alive = True, is_ready = False):
+    name = ""
+    
+    def __init__(self, socket:websockets.WebSocketServerProtocol, id:str, is_alive:bool = True, is_ready:bool = False):
         self.socket = socket
         self.id = id
         self.is_ready = is_ready

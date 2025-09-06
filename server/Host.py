@@ -1,5 +1,7 @@
+import websockets
+
 class Host:
-    def __init__(self, socket, id):
+    def __init__(self, socket: websockets.WebSocketServerProtocol, id: str):
         self.socket = socket
         self.id = id
     

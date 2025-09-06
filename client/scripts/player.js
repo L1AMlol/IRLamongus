@@ -1,5 +1,5 @@
-const testBtn = document.getElementById("testBtn");
 const messageInput = document.getElementById("messageInput");
+const nameInput = document.getElementById("nameInput");
 
 const sender = Date.now + Math.floor(Math.random() * (106030200));
 
@@ -12,7 +12,7 @@ const sendPayload = function (payload) {
 socket.onopen = () => {
     console.log('Connected to WebSocket server');
     const payload = {
-        message: "first from host",
+        data: "first from host",
         userType: "player",
         messageType: "auth",
         sender: sender,
@@ -32,15 +32,26 @@ socket.onclose = e => {
     console.log('WebSocket connection closed');
 };
 
-testBtn.addEventListener('click', () => {
-    if(!messageInput.value){ return }
-    const message = messageInput.value;
+
+const setName = function() {
+    if(!nameInput.value){ return }
+    
     const payload = {
-        message: message,
+        data: nameInput.value,
         userType: "player",
-        messageType: "normal",
+        messageType: "set name",
         sender: sender,
     };
-    sendPayload(payload);
-});
+    sendPayload(payload)
+};
 
+const sendTestMessage = function() {
+    if(!messageInput.value){ return }
+
+    const payload = {
+        data: messageInput.value,
+        userType: "player",
+        messageType: "test message",
+        sender: sender,
+    }
+};
