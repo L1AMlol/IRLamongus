@@ -65,8 +65,6 @@ async def start_server():
         asyncio.create_task(broadcast_ping())
         await asyncio.Future()
 
-try:
-    asyncio.run(start_server())
+
+asyncio.run(start_server())
     
-except KeyboardInterrupt:
-    print("server closed")
