@@ -1,4 +1,3 @@
-const testBtn = document.getElementById("testBtn");
 const messageInput = document.getElementById("messageInput");
 
 const sender = Date.now + Math.floor(Math.random() * (106030200));
@@ -32,8 +31,9 @@ socket.onclose = e => {
     console.log('WebSocket connection closed');
 };
 
-testBtn.addEventListener('click', () => {
+const sendTestMessage = function() {
     if(!messageInput.value){ return }
+
     const message = messageInput.value;
     const payload = {
         data: message,
@@ -42,5 +42,6 @@ testBtn.addEventListener('click', () => {
         sender: sender,
     };
     sendPayload(payload);
-});
+}
+
 
