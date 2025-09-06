@@ -53,5 +53,6 @@ const sendTestMessage = function() {
         userType: "player",
         messageType: "test message",
         sender: sender,
-    }
+    };
+    sendPayload(payload);
 };

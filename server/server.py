@@ -9,22 +9,22 @@ player_clients = set()
 hosts = set()
 clients = set()
 
-async def wait_on_message(ws:websockets.WebSocketServerProtocol) -> dict:
+async def wait_on_message(ws:websockets.WebSocketServerProtocol):
     message_str = await ws.recv()
     message = json.loads(message_str)
     return message
 
 async def handle_player(player:Player):
-    payload = wait_on_message(player.socket)
+    payload = await wait_on_message(player.socket)
     data = payload['data']
     
     match payload['messageType']:
         case "set name":
             player.name = str(data)
+            print(f"name set for player: {player.name}")
 
         case "test message":
-            if player.name:
-                print(f"{player.name} -> {data}")
+            print(f"{player.name} -> {data}")
     
 
 
@@ -35,7 +35,7 @@ async def handle_host(host:Host):
 async def handle_client(ws):
     
     try:
-        first_msg = wait_on_message(ws)
+        first_msg = await wait_on_message(ws)
         if first_msg['userType'] == "host":
             if ws not in host_clients:
                 host_clients.add(ws)
@@ -53,9 +53,9 @@ async def handle_client(ws):
                 print("a player has connected")
         while True:
             if is_host:
-                handle_host(host)
+                await handle_host(host)
             elif is_player:
-                handle_player(player)
+                await handle_player(player)
 
 
     except websockets.exceptions.ConnectionClosed:
