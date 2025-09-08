@@ -99,8 +99,10 @@ const addPlayerDOMList = function(player, list) {
         console.warn("wrong DOM list given");
     }
 
-    const html = `<li id="id_${player.player_id}">${player.player_name}</li>`;
+    const html = "<li>test</li>";
+    // const html = `<li id="id_${player.player_id}">${player.player_name}</li>`;
     console.log(html);
+    console.log(targetList.innerHTML);
     targetList.innerHTML += html;
 };
 
