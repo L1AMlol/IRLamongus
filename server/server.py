@@ -10,10 +10,20 @@ player_clients = set()
 hosts = set()
 clients = set()
 
+
+async def broadcast_to_hosts(payload:dict):
+    for ws in host_clients:
+        await ws.send(json.dumps(payload))
+
+
+
 async def wait_on_message(ws:websockets.WebSocketServerProtocol):
     message_str = await ws.recv()
     message = json.loads(message_str)
     return message
+
+
+
 
 async def handle_player(player:Player):
     payload = await wait_on_message(player.socket)
@@ -23,13 +33,47 @@ async def handle_player(player:Player):
         case "set name":
             player.name = str(data)
             print(f"[set name] --> {player.name}")
+            payload = {
+                "messageType": "set name",
+                "player_name": player.name,
+                "player_id": player.id
+            }
+            await broadcast_to_hosts(payload)
 
         case "test message":
             if player.name:
                 print(f"[test message] --> {player.name} -> {data}")
             else:
                 print(f"[test message] --> player? -> {data}")
-    
+
+        case "is ready":
+            if data == True:
+                print(f"[ready] --> {player.name} is ready!")
+                player.is_ready = True
+                payload = {
+                    "messageType": "player is ready",
+                    "player_name": player.name,
+                    "player_id": player.id
+                }
+            elif data == False:
+                print(f"[ready] --> {player.name} is not ready")
+                player.is_ready = False
+                payload = {
+                    "messageType": "player is not ready",
+                    "player_name": player.name,
+                    "player_id": player.id
+                }
+            else:
+                print(f"[ready] --> got wrong data")
+                payload = {
+                    "messageType": "wrong data",
+                    "player_name": player.name,
+                    "player_id": player.id
+                }
+            await broadcast_to_hosts(payload)
+
+
+
 
 
 
@@ -40,6 +84,9 @@ async def handle_host(host:Host):
     match payload['messageType']:
         case "test message":
             print(f"[test message] --> host -> {data}")
+
+
+
 
 async def handle_client(ws):
     
@@ -78,7 +125,11 @@ async def handle_client(ws):
             host_clients.remove(ws)
         elif ws in player_clients:
             player_clients.remove(ws)
-        
+
+
+
+
+
 
 async def broadcast_ping():
     while True:

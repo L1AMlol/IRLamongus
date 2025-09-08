@@ -1,1 +1,13 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
 
+ol {
+    border: 1px solid #757575;
+    border-radius: 10px;
+    margin:4px 8px 8px;
+}
+
+li {
+    margin: 4px;
+}

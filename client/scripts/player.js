@@ -1,7 +1,7 @@
 const messageInput = document.getElementById("messageInput");
 const nameInput = document.getElementById("nameInput");
 
-const sender = Date.now + Math.floor(Math.random() * (106030200));
+const sender = Date.now() + Math.floor(Math.random() * (106030200));
 
 const ip = location.host.split(':')[0];
 const socket = new WebSocket(`ws://${ip}:8765`);
@@ -57,3 +57,23 @@ const sendTestMessage = function() {
     };
     sendPayload(payload);
 };
+
+const sendReady = function() {
+    const payload = {
+        data: true,
+        userType: "player",
+        messageType: "is ready",
+        sender: sender,
+    };
+    sendPayload(payload);
+}
+
+const sendNotReady = function() {
+    const payload = {
+        data: false,
+        userType: "player",
+        messageType: "is ready",
+        sender: sender,
+    };
+    sendPayload(payload);
+}
