@@ -100,7 +100,7 @@ def get_local_ip():
 
 async def start_server():
     ip = get_local_ip()
-    async with websockets.serve(handle_client, ip, 8765):
+    async with websockets.serve(handle_client, "localhost", 8765):
         print(f"Server started at {ip}:8765")
         asyncio.create_task(broadcast_ping())
         await asyncio.Future()
