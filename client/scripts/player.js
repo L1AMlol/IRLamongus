@@ -1,5 +1,6 @@
 const messageInput = document.getElementById("messageInput");
 const nameInput = document.getElementById("nameInput");
+const isConnectedParragraph = document.getElementById("isConnectedParragraph");
 
 const sender = Date.now() + Math.floor(Math.random() * (106030200));
 
@@ -12,6 +13,8 @@ const sendPayload = function (payload) {
 
 socket.onopen = () => {
     console.log('Connected to WebSocket server');
+    isConnectedParragraph.innerHTML = "connected";
+    isConnectedParragraph.classList.toggle("not-connected");
     const payload = {
         data: "first from host",
         userType: "player",
@@ -31,6 +34,8 @@ socket.onerror = (error) => {
 
 socket.onclose = e => {
     console.log('WebSocket connection closed');
+    isConnectedParragraph.innerHTML = "not connected";
+    isConnectedParragraph.classList.toggle("not-connected");
 };
 
 

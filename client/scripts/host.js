@@ -1,6 +1,7 @@
 const messageInput = document.getElementById("messageInput");
 const readyList = document.getElementById("players-ready");
 const notReadyList = document.getElementById("players-not-ready");
+const isConnectedParragraph = document.getElementById("isConnectedParragraph");
 
 const sender = Date.now + Math.floor(Math.random() * (106030200));
 let readyPlayers = []
@@ -14,6 +15,8 @@ const sendPayload = function (payload) {
 
 socket.onopen = () => {
     console.log('Connected to WebSocket server');
+    isConnectedParragraph.innerHTML = "connected";
+    isConnectedParragraph.classList.toggle("not-connected");
     const payload = {
         data: "first from host",
         userType: "host",
@@ -32,7 +35,6 @@ socket.onmessage = ({data}) => {
                 player_name: message.player_name,
                 player_id: message.player_id
             };
-            notReadyList.append(player);
             addPlayerDOMList(player, "not ready");
             break;
 
@@ -42,9 +44,8 @@ socket.onmessage = ({data}) => {
                 player_name: message.player_name,
                 player_id: message.player_id
             };
-            readyList.append(player);
-            addPlayerDOMList(player, "ready");
             removePlayerDOMList(player);
+            addPlayerDOMList(player, "ready");
             break;
             
         case "player is not ready":
@@ -53,9 +54,8 @@ socket.onmessage = ({data}) => {
                 player_name: message.player_name,
                 player_id: message.player_id
             };
-            readyList.append(player);
-            addPlayerDOMList(player, "not ready");
             removePlayerDOMList(player);
+            addPlayerDOMList(player, "not ready");
             break;
                 
         default:
@@ -72,6 +72,8 @@ socket.onerror = (error) => {
 
 socket.onclose = e => {
     console.log('WebSocket connection closed');
+    isConnectedParragraph.innerHTML = "not connected";
+    isConnectedParragraph.classList.toggle("not-connected");
 };
 
 const sendTestMessage = function() {
@@ -99,8 +101,7 @@ const addPlayerDOMList = function(player, list) {
         console.warn("wrong DOM list given");
     }
 
-    const html = "<li>test</li>";
-    // const html = `<li id="id_${player.player_id}">${player.player_name}</li>`;
+    const html = `<li id="id_${player.player_id}">${player.player_name}</li>`;
     console.log(html);
     console.log(targetList.innerHTML);
     targetList.innerHTML += html;

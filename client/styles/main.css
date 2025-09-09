@@ -11,3 +11,10 @@ ol {
 li {
     margin: 4px;
 }
+
+#isConnectedParragraph.not-connected {
+    color: red;
+}
+#isConnectedParragraph {
+    color: lime;
+}
