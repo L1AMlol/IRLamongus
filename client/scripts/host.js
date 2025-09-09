@@ -35,7 +35,12 @@ socket.onmessage = ({data}) => {
                 player_name: message.player_name,
                 player_id: message.player_id
             };
-            addPlayerDOMList(player, "not ready");
+            if (document.getElementById(`id_${player.player_id}`)) {
+                document.getElementById(`id_${player.player_id}`).innerHTML = player.player_name;
+            }
+            else {
+                addPlayerDOMList(player, "not ready");
+            }
             break;
 
         case "player is ready":
