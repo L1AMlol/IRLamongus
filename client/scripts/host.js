@@ -16,7 +16,7 @@ const sendPayload = function (payload) {
 socket.onopen = () => {
     console.log('Connected to WebSocket server');
     isConnectedParragraph.innerHTML = "connected";
-    isConnectedParragraph.classList.toggle("not-connected");
+    isConnectedParragraph.classList.remove("not-connected");
     const payload = {
         data: "first from host",
         userType: "host",
@@ -78,7 +78,7 @@ socket.onerror = (error) => {
 socket.onclose = e => {
     console.log('WebSocket connection closed');
     isConnectedParragraph.innerHTML = "not connected";
-    isConnectedParragraph.classList.toggle("not-connected");
+    isConnectedParragraph.classList.add("not-connected");
 };
 
 const sendTestMessage = function() {
